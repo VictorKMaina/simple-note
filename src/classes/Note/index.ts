@@ -1,7 +1,16 @@
 import Profile from "@/classes/Profile"
 import type { InterfaceNote } from "@/interfaces"
-import type { labelColor } from "@/types"
-import { getAllNotes, addNoteToDB, getNoteByOwner, getNoteByKey, getNotesByLabel, deleteNotes, deleteNote } from "./methods"
+import type { labelColor, noteField } from "@/types"
+import {
+    getAllNotes,
+    addNoteToDB,
+    getNoteByOwner,
+    getNoteByKey,
+    getNotesByLabel,
+    deleteNotes,
+    deleteNote,
+    updateNote
+} from "./methods"
 
 export default class Note implements InterfaceNote {
     key?: IDBValidKey
@@ -53,6 +62,13 @@ export default class Note implements InterfaceNote {
         return deleteNote(this)
     }
 
+    async update(
+        field: noteField,
+        value: string | Date | labelColor
+    ): Promise<Note> {
+        return updateNote(this, field, value)
+    }
+
     // ---------- STATIC METHODS ----------
     static async getAll(): Promise<Note[]> {
         return getAllNotes()
@@ -75,14 +91,3 @@ export default class Note implements InterfaceNote {
         return deleteNotes(notes)
     }
 }
-
-// const note = new Note('This is a anote', '', 'pauline', true)
-// console.log(await new Promise(resolve => {
-//     setTimeout(() => resolve(note), 1000)
-// }))
-
-// const notes = Note.getByOwner('pauline')
-// console.log(await notes)
-// notes.then(notes => {
-//     Note.delete(notes)
-// })
