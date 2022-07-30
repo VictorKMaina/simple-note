@@ -1,7 +1,7 @@
 import Profile from "@/classes/Profile"
 import type { InterfaceNote } from "@/interfaces"
 import type { labelColor } from "@/types"
-import { getAllNotes, newNoteDB, getNoteByOwner, getNoteByKey, getNotesByLabel, deleteNotes, deleteNote } from "./methods"
+import { getAllNotes, addNoteToDB, getNoteByOwner, getNoteByKey, getNotesByLabel, deleteNotes, deleteNote } from "./methods"
 
 export default class Note implements InterfaceNote {
     key?: IDBValidKey
@@ -45,7 +45,7 @@ export default class Note implements InterfaceNote {
     }
 
     async addToDB(): Promise<IDBValidKey> {
-        return newNoteDB(this)
+        return addNoteToDB(this)
     }
 
     // Delete note instance

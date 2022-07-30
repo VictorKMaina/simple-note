@@ -1,13 +1,13 @@
 import type Note from "@/classes/Note"
+import Profile from "@/classes/Profile"
 import { getObjectStore } from "@/database"
 import type { InterfaceNote } from "@/interfaces"
 
-async function newNoteDB(note: Note): Promise<IDBValidKey> {
-    const objStore: IDBObjectStore = await getObjectStore("notes", "readwrite")
-
-    // Create new object withou ID field
+async function addNoteToDB(note: Note): Promise<IDBValidKey | null> {
+    
+    // Create new object without ID field
     const { heading, body, dateCreated, dateModified, owner, label } = note
-
+    
     const noteObj: InterfaceNote = {
         heading,
         body,
@@ -16,6 +16,16 @@ async function newNoteDB(note: Note): Promise<IDBValidKey> {
         owner,
         label,
     }
+    
+    const objStore: IDBObjectStore = await getObjectStore("notes", "readwrite")
+
+    // Verify that user exists. Abort transaction if profile isn't found.
+    Profile.getByUsername(note.owner).then((profile) => {
+        console.log(`Profile ${profile.username} found successfully.`)
+    }).catch(err => {
+        objStore.transaction.abort()
+        console.error(err)
+    })
 
     const req: IDBRequest = objStore.add(noteObj)
 
@@ -31,8 +41,7 @@ async function newNoteDB(note: Note): Promise<IDBValidKey> {
             reject(targetReq.error)
         }
     })
-
     return newNoteKey
 }
 
-export default newNoteDB
+export default addNoteToDB
