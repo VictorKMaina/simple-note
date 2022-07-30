@@ -3,6 +3,7 @@ import { getObjectStore } from "@/database";
 
 async function deleteNote(note: Note) {
     const { key } = note
+    console.log(key)
     const objectStore = await getObjectStore('notes', 'readwrite')
     const req = objectStore.delete(key as IDBValidKey)
 

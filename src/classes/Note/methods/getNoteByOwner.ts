@@ -5,7 +5,7 @@ import Profile from "@/classes/Profile";
 async function getNoteByOwner(username: string): Promise<Note[]> {
     
     try {
-        // Throw exception if user does not exist.
+        // Log exception if user does not exist.
         const profile = await Profile.getByUsername(username)
     } catch (error) {
         console.error(error)
@@ -23,10 +23,11 @@ async function getNoteByOwner(username: string): Promise<Note[]> {
             const cursor:IDBCursorWithValue = targetReq.result
 
             if(cursor){
-                const { key, value } = cursor
+                const { primaryKey, value } = cursor
                 const { heading, body, dateCreated, dateModified, owner, label } = value as Note;
 
                 const note = new Note(heading, body, owner)
+                note.key = primaryKey
                 note.dateCreated = dateCreated
                 note.dateModified = dateModified
                 note.owner = owner

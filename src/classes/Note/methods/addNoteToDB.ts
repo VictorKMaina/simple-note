@@ -41,6 +41,7 @@ async function addNoteToDB(note: Note): Promise<IDBValidKey | null> {
             reject(targetReq.error)
         }
     })
+    
     return newNoteKey
 }
 

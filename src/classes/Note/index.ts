@@ -44,7 +44,7 @@ export default class Note implements InterfaceNote {
         if (addToDB) this.addToDB()
     }
 
-    async addToDB(): Promise<IDBValidKey> {
+    async addToDB(): Promise<IDBValidKey | null> {
         return addNoteToDB(this)
     }
 
@@ -76,12 +76,13 @@ export default class Note implements InterfaceNote {
     }
 }
 
-const note = new Note('', '', 'victormainak', true)
-console.log(await new Promise(resolve => {
-    setTimeout(() => resolve(note), 1000)
-}))
+// const note = new Note('This is a anote', '', 'pauline', true)
+// console.log(await new Promise(resolve => {
+//     setTimeout(() => resolve(note), 1000)
+// }))
 
-// const notes = Note.getAll(
+// const notes = Note.getByOwner('pauline')
+// console.log(await notes)
 // notes.then(notes => {
 //     Note.delete(notes)
 // })
